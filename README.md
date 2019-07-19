@@ -1,6 +1,6 @@
 # ZSH background plugin
 
-This plugin contain patched version of zsh-add-hook,
+This plugin contains patched version of zsh-add-hook,
 it supports functions who will run in background,
 by default, every 5 seconds.
 For compatibility it was renamed from `add-zsh-hook` to `add-hook`
