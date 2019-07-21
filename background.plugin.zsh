@@ -8,7 +8,7 @@ TRAPALRM() {
   done
 }
 
-function add-hook(){
+function add-zsh-hook(){
   emulate -L zsh
   
   local -a hooktypes
@@ -90,3 +90,26 @@ function add-hook(){
   fi
 
 }
+
+_add-zsh-hook_hooks() {
+  local expl
+  if (( $+opt_args[-d] )); then
+    _wanted functions expl "installed hooks" compadd -a - "$line[1]_functions" && return 0
+  else
+    _functions && return 0
+  fi
+  return 1
+}
+
+_add-zsh-hook() {
+  local context state state_descr line
+  typeset -A opt_args
+  _arguments -s -w -S : \
+    '(-D)-d[remove HOOK from the array]' \
+    '(-d)-D[interpret HOOK as pattern to remove from the array]' \
+    {-U,-z,-k}"[passed to 'autoload']" \
+    ':hook class:(chpwd precmd preexec periodic zshaddhistory zshexit zsh_directory_name background)' \
+    ':hook function:_add-zsh-hook_hooks'
+}
+
+compdef _add-zsh-hook add-zsh-hook
