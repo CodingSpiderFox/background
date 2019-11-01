@@ -26,28 +26,28 @@ function add-zsh-hook(){
     case $opt in
       (d)
       del=1
-      ;;
+    ;;
+    
+    (D)
+    del=2
+  ;;
   
-      (D)
-      del=2
-      ;;
-  
-      (h)
-      help=1
-      ;;
-  
-      (L)
-      list=1
-      ;;
-  
-      ([Uzk])
-      autoopts+=(-$opt)
-      ;;
-  
-      (*)
-      return 1
-      ;;
-    esac
+  (h)
+  help=1
+;;
+
+(L)
+list=1
+;;
+
+([Uzk])
+autoopts+=(-$opt)
+;;
+
+(*)
+return 1
+;;
+esac
   done
   shift $(( OPTIND - 1 ))
   
@@ -88,7 +88,7 @@ function add-zsh-hook(){
     fi
     autoload $autoopts -- $fn
   fi
-
+  
 }
 
 _add-zsh-hook_hooks() {
@@ -101,15 +101,19 @@ _add-zsh-hook_hooks() {
   return 1
 }
 
-_add-zsh-hook() {
-  local context state state_descr line
-  typeset -A opt_args
-  _arguments -s -w -S : \
+_def_bg_compl(){
+  _add-zsh-hook() {
+    local context state state_descr line
+    typeset -A opt_args
+    _arguments -s -w -S : \
     '(-D)-d[remove HOOK from the array]' \
     '(-d)-D[interpret HOOK as pattern to remove from the array]' \
     {-U,-z,-k}"[passed to 'autoload']" \
     ':hook class:(chpwd precmd preexec periodic zshaddhistory zshexit zsh_directory_name background)' \
     ':hook function:_add-zsh-hook_hooks'
+  }
+  
+  compdef _add-zsh-hook add-zsh-hook
 }
 
-compdef _add-zsh-hook add-zsh-hook
+add-zsh-hook background _def_bg_compl
