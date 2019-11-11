@@ -1,13 +1,5 @@
 #!/usr/bin/env zsh
 
-TMOUT=5
-
-TRAPALRM() {
-  for fn in $background_functions; do
-    $fn
-  done
-}
-
 function add-zsh-hook(){
   emulate -L zsh
   
@@ -91,6 +83,14 @@ esac
   
 }
 
+TMOUT=5
+
+TRAPALRM() {
+  for fn in $background_functions; do
+    $fn
+  done
+}
+
 _add-zsh-hook_hooks() {
   local expl
   if (( $+opt_args[-d] )); then
@@ -101,19 +101,20 @@ _add-zsh-hook_hooks() {
   return 1
 }
 
+_add-zsh-hook() {
+  local context state state_descr line
+  typeset -A opt_args
+  _arguments -s -w -S : \
+  '(-D)-d[remove HOOK from the array]' \
+  '(-d)-D[interpret HOOK as pattern to remove from the array]' \
+  {-U,-z,-k}"[passed to 'autoload']" \
+  ':hook class:(chpwd precmd preexec periodic zshaddhistory zshexit zsh_directory_name background)' \
+  ':hook function:_add-zsh-hook_hooks'
+}
+
 _def_bg_compl(){
-  _add-zsh-hook() {
-    local context state state_descr line
-    typeset -A opt_args
-    _arguments -s -w -S : \
-    '(-D)-d[remove HOOK from the array]' \
-    '(-d)-D[interpret HOOK as pattern to remove from the array]' \
-    {-U,-z,-k}"[passed to 'autoload']" \
-    ':hook class:(chpwd precmd preexec periodic zshaddhistory zshexit zsh_directory_name background)' \
-    ':hook function:_add-zsh-hook_hooks'
-  }
-  
   compdef _add-zsh-hook add-zsh-hook
+  add-zsh-hook background -d _def_bg_compl
 }
 
 add-zsh-hook background _def_bg_compl
