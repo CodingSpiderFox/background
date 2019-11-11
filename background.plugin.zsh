@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 
+
 function add-zsh-hook(){
   emulate -L zsh
   
@@ -114,7 +115,7 @@ _add-zsh-hook() {
 
 _def_bg_compl(){
   compdef _add-zsh-hook add-zsh-hook
-  add-zsh-hook background -d _def_bg_compl
+  add-zsh-hook -d background _def_bg_compl
 }
 
 add-zsh-hook background _def_bg_compl
