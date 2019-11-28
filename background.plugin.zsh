@@ -115,7 +115,7 @@ _add-zsh-hook() {
 
 _def_bg_compl(){
   compdef _add-zsh-hook add-zsh-hook
-  add-zsh-hook -d background _def_bg_compl
+  add-zsh-hook -d precmd _def_bg_compl
 }
 
-add-zsh-hook background _def_bg_compl
+add-zsh-hook precmd _def_bg_compl
