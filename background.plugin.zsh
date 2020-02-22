@@ -87,6 +87,7 @@ esac
 TMOUT=5
 
 TRAPALRM() {
+  local fn
   for fn in $background_functions; do
     $fn
   done
