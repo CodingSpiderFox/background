@@ -83,14 +83,16 @@ function add-zsh-hook(){
 
 }
 
-TMOUT=5
-
-function TRAPALRM() {
+function _background_worker() {
   local fn
   for fn in $background_functions; do
     $fn
   done
+  sched +5 _background_worker
 }
+
+sched +5 _background_worker
+
 
 function _add_zsh_hook_hooks() {
   local expl
